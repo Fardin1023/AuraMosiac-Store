@@ -6,7 +6,7 @@ import { useState } from "react";
 import React from "react";
 
 const Navigation = () => {
-  const [isOpenSidebarVal, setisopenSidebarVal] = useState(true);
+  const [isOpenSidebarVal, setisopenSidebarVal] = useState(false);
   
   return (
     <nav>
@@ -36,6 +36,13 @@ const Navigation = () => {
       <Link to="/">
         <Button>Skincare Products</Button>
       </Link>
+      <div className="submenu">
+        <Link to="/" ><Button>Acne & Blemish Care</Button></Link>
+        <Link to="/" ><Button>Anti-Aging & Wrinkle Care</Button></Link>
+        <Link to="/" ><Button>Brightening & Pigmentation</Button></Link>
+        <Link to="/" ><Button>Hydration & Dry Skin</Button></Link>
+        <Link to="/" ><Button>Sensitive Skin Solutions</Button></Link>
+      </div>
     </li>
     <li>
       <Link to="/">
@@ -187,7 +194,6 @@ const Navigation = () => {
 };
 export default Navigation;
 
-};
-export default Navigation;
+
 
 
