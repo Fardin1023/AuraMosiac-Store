@@ -2,12 +2,25 @@ import Rating from '@mui/material/Rating';
 import Button from '@mui/material/Button';
 import { BsArrowsFullscreen } from "react-icons/bs";
 import { FaRegHeart } from "react-icons/fa";
+import ProductModal from '../ProductModal';
+import { useState } from 'react';
 
 
 
 const ProductItem = () => {
+
+  const [isOpenProductModal, setisOpenProductModal] =useState(false)
+  const viewProductDetails=(id)=>{
+    setisOpenProductModal(true);
+      
+    }
+    const closeProductModal=() =>{
+      setisOpenProductModal(false)
+    }
   return (
-    <div className="item productItem">
+    
+    <>
+      <div className="item productItem">
                       <div className="imgWrapper">
                         <img
                           src="https://bk.shajgoj.com/storage/2025/01/ng-saffron-fw-02-min.jpg"
@@ -16,7 +29,7 @@ const ProductItem = () => {
                         />
                         <span className="badge badge-primary">50%</span>
                         <div className="actions">
-                            <Button><BsArrowsFullscreen /> </Button>
+                            <Button onClick={()=>viewProductDetails(1)}><BsArrowsFullscreen /> </Button>
                             <Button><FaRegHeart style={{ fontSize: "20px" }} /> </Button>
                         </div>
                       </div>
@@ -30,6 +43,14 @@ const ProductItem = () => {
                         </div>
                      </div>
                     </div>
+
+
+                    {
+                      isOpenProductModal===true && <ProductModal closeProductModal ={closeProductModal}/>
+                    }
+
+                    {/*<ProductModal/>*/}
+    </>
   )
 }
 
@@ -442,4 +463,3 @@ export const ProductItem16 = () => {
                     </div>
   )
 }
-
