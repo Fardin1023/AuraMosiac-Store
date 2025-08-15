@@ -7,71 +7,79 @@ import React from "react";
 
 const Navigation = () => {
   const [isOpenSidebarVal, setisopenSidebarVal] = useState(false);
-  
+
   return (
     <nav>
       <div className="container">
         <div className="row">
           <div className="col-sm-3 navPart1">
             <div className="catWrapper">
-              
               {/* ALL CATEGORIES Button */}
-<Button
-  className="allCartTab align-items-center"
-  onClick={() => setisopenSidebarVal(!isOpenSidebarVal)}
->
-  <span className="icon1 mr-2">
-    <IoMenu />
-  </span>
-  <span className="text">ALL CATEGORIES</span>
-  <span className="icon2 ml-2">
-    <FaAngleDown />
-  </span>
-</Button>
+              <Button
+                className="allCartTab align-items-center"
+                onClick={() => setisopenSidebarVal(!isOpenSidebarVal)}
+              >
+                <span className="icon1 mr-2">
+                  <IoMenu />
+                </span>
+                <span className="text">ALL CATEGORIES</span>
+                <span className="icon2 ml-2">
+                  <FaAngleDown />
+                </span>
+              </Button>
 
-{/* Sidebar Navigation */}
-<div className={`sidebarNav ${isOpenSidebarVal ? "open" : ""}`}>
-  <ul>
-    <li>
-      <Link to="/">
-        <Button>Skincare Products</Button>
-      </Link>
-      <div className="submenu">
-        <Link to="/" ><Button>Acne & Blemish Care</Button></Link>
-        <Link to="/" ><Button>Anti-Aging & Wrinkle Care</Button></Link>
-        <Link to="/" ><Button>Brightening & Pigmentation</Button></Link>
-        <Link to="/" ><Button>Hydration & Dry Skin</Button></Link>
-        <Link to="/" ><Button>Sensitive Skin Solutions</Button></Link>
-      </div>
-    </li>
-    <li>
-      <Link to="/">
-        <Button>Plants</Button>
-      </Link>
-    </li>
-    <li>
-      <Link to="/">
-        <Button>Handcraft Items</Button>
-      </Link>
-    </li>
-    <li>
-      <Link to="/">
-        <Button>Home Décor</Button>
-      </Link>
-    </li>
-    <li>
-      <Link to="/">
-        <Button>Gifting</Button>
-      </Link>
-    </li>
-    <li>
-      <Link to="/">
-        <Button>New Arrivals</Button>
-      </Link>
-    </li>
-  </ul>
-</div>
-
+              {/* Sidebar Navigation */}
+              <div className={`sidebarNav ${isOpenSidebarVal ? "open" : ""}`}>
+                <ul>
+                  <li>
+                    <Link to="/">
+                      <Button>Skincare Products</Button>
+                    </Link>
+                    <ul className="submenu shadow">
+                     <li> <Link to="/">
+                        <Button>Night Creams</Button>
+                      </Link></li>
+                      <li> <Link to="/">
+                        <Button>Exfoliators</Button>
+                      </Link></li>
+                      <li> <Link to="/">
+                        <Button>Sheet Masks</Button>
+                      </Link></li>
+                      <li><Link to="/">
+                        <Button>Facial Oils</Button>
+                      </Link></li>
+                      <li><Link to="/">
+                        <Button>Acne Treatments</Button>
+                      </Link></li>
+                    </ul>
+                  </li>
+                  <li>
+                    <Link to="/">
+                      <Button>Plants</Button>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/">
+                      <Button>Handcraft Items</Button>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/">
+                      <Button>Home Décor</Button>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/">
+                      <Button>Gifting</Button>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/">
+                      <Button>New Arrivals</Button>
+                    </Link>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
           <div className="col-sm-9 navPart2 d-flex align-items-center">
@@ -193,7 +201,3 @@ const Navigation = () => {
   );
 };
 export default Navigation;
-
-
-
-
