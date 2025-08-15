@@ -17,7 +17,7 @@ const ProductItem = () => {
                         <span className="badge badge-primary">50%</span>
                         <div className="actions">
                             <Button><BsArrowsFullscreen /> </Button>
-                            <Button><FaRegHeart /> </Button>
+                            <Button><FaRegHeart style={{ fontSize: "20px" }} /> </Button>
                         </div>
                       </div>
                      <div className="info">
