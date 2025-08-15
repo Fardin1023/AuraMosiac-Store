@@ -16,57 +16,57 @@ return(
         <div className="container">
             <h3 class="mb-0 hd">Featured Products</h3>
             <Swiper
-                  slidesPerView={10}
-                  spaceBetween={100}
-                  navigation={true}
-                  slidesPerGroup={1}
-                  pagination={{
-                    clickable: true,
-                  }}
-                  modules={[Navigation]}
-                  className="mySwiper"
-                >
+  slidesPerView={6}
+  spaceBetween={20}
+  navigation={true}
+  slidesPerGroup={1}
+  pagination={{
+    clickable: true,
+  }}
+  modules={[Navigation]}
+  className="mySwiper"
+>
                  <SwiperSlide>
                     <div className="item">
                         <img src={logo2} alt="logo2" />
                     </div>
-                    <h6>Moisturizers</h6>
+                    <h6>Skincare Products</h6>
                  </SwiperSlide>
                  <SwiperSlide>
                     <div className="item">
                         <img src={logo3} alt="logo2" />
                     </div>
-                    <h6>Moisturizers</h6>
+                    <h6>Plants</h6>
                  </SwiperSlide>
                  <SwiperSlide>
                     <div className="item">
                         <img src={logo4} alt="logo2" />
                     </div>
-                    <h6>Moisturizers</h6>
+                    <h6>Handicraft Items</h6>
                  </SwiperSlide>
                  <SwiperSlide>
                     <div className="item">
                         <img src={logo5} alt="logo2" />
                     </div>
-                    <h6>Moisturizers</h6>
+                    <h6>Beauty Accessories</h6>
                  </SwiperSlide>
                  <SwiperSlide>
                     <div className="item">
                         <img src={logo6} alt="logo2" />
                     </div>
-                    <h6>Moisturizers</h6>
+                    <h6>Kitchen Essentials</h6>
                  </SwiperSlide>
                  <SwiperSlide>
                     <div className="item">
                         <img src={logo7} alt="logo2" />
                     </div>
-                    <h6>Moisturizers</h6>
+                    <h6>Stationery</h6>
                  </SwiperSlide>
                  <SwiperSlide>
                     <div className="item">
                         <img src={logo8} alt="logo2" />
                     </div>
-                    <h6>Moisturizers</h6>
+                    <h6>Pet Supplies</h6>
                  </SwiperSlide>
                  </Swiper>
         </div>
@@ -75,3 +75,7 @@ return(
 }
 
 export default HomeCat;
+
+
+export default HomeCat;
+
