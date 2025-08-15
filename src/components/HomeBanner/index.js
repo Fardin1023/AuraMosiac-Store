@@ -1,4 +1,7 @@
+
 import Slider from "react-slick";
+
+
 const HomeBanner = () => {
   var settings = {
     dots: false,
@@ -15,18 +18,18 @@ const HomeBanner = () => {
       <Slider {...settings}>
         <div className="item">
           <img
-            src="https://img.freepik.com/premium-photo/set-female-skin-care-products_86156-789.jpg"
-            alt="skincare" className="w-100"
+            src="https://media.timeout.com/images/105473507/image.jpg"
+            alt="skincare" className="w-100 h-55"
           />
           </div>
            <div className="item">
           <img
-            src="https://www.gfebusiness.org/blog/wp-content/uploads/2019/11/Handicrafts-Handloom-Exports-Corporation-of-India.jpg"
+            src="https://www.marthastewart.com/thmb/1r0K4i4pVGdqQDqZ_bJ36BIg0YI=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/plants-look-beautiful-when-not-blooming-coleus-lead-getty-0623-c6efce0847fc421fab5f394fe02cda51.jpg"
             alt="handicrafts" className="w-100"
           /></div>
           <div className="item">
           <img
-            src="https://i.cdn.newsbytesapp.com/images/l6120250804110553.jpeg"
+            src="https://bfti.org.bd/storage/media/596/Picture2.png"
             alt="handicrafts" className="w-100"
           /></div>
       </Slider>
