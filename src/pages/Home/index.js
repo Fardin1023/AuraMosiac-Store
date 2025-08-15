@@ -8,15 +8,14 @@ import "swiper/css";
 import "swiper/css/navigation";
 import { Navigation } from 'swiper/modules';
 import ProductItem from "../../components/ProductItem";
+import HomeCat from "../../components/HomeCat";
 
 
 const Header = () => {
   return (
     <>
       <HomeBanner />
-      <section className="homeCat">
-        <div className="container"></div>
-      </section>
+        <HomeCat/>
       <section className="homeProducts">
         <div className="container">
           <div className="row">
@@ -138,5 +137,6 @@ const Header = () => {
   );
 };
 export default Header;
+
 
 
