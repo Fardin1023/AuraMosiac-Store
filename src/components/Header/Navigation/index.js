@@ -4,6 +4,7 @@ import { FaAngleDown } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import React from "react";
+import { FaAngleRight } from "react-icons/fa6";
 
 const Navigation = () => {
   const [isOpenSidebarVal, setisopenSidebarVal] = useState(false);
@@ -33,7 +34,7 @@ const Navigation = () => {
                 <ul>
                   <li>
                     <Link to="/">
-                      <Button>Skincare Products</Button>
+                      <Button>Skincare Products <FaAngleRight className="ml-auto"/></Button>
                     </Link>
                     <ul className="submenu shadow">
                      <li> <Link to="/">
@@ -55,28 +56,114 @@ const Navigation = () => {
                   </li>
                   <li>
                     <Link to="/">
-                      <Button>Plants</Button>
+                      <Button>Plants <FaAngleRight className="ml-auto"/></Button>
                     </Link>
+                    <ul className="submenu shadow">
+                     <li> <Link to="/">
+                        <Button>Indoor Plants</Button>
+                      </Link></li>
+                      <li> <Link to="/">
+                        <Button>Outdoor Plants</Button>
+                      </Link></li>
+                      <li> <Link to="/">
+                        <Button>Succulents</Button>
+                      </Link></li>
+                      <li><Link to="/">
+                        <Button>Flowering Plants</Button>
+                      </Link></li>
+                      <li><Link to="/">
+                        <Button>Herbs</Button>
+                      </Link></li>
+                    </ul>
                   </li>
                   <li>
                     <Link to="/">
-                      <Button>Handcraft Items</Button>
+                      <Button>Handcraft Items <FaAngleRight className="ml-auto"/></Button>
                     </Link>
+                    <ul className="submenu shadow">
+                     <li> <Link to="/">
+                        <Button>Wooden Crafts</Button>
+                      </Link></li>
+                      <li> <Link to="/">
+                        <Button>Handmade Jewelry</Button>
+                      </Link></li>
+                      <li> <Link to="/">
+                        <Button>Pottery</Button>
+                      </Link></li>
+                      <li><Link to="/">
+                        <Button>Woven Baskets</Button>
+                      </Link></li>
+                      <li><Link to="/">
+                        <Button>Embroidery Items</Button>
+                      </Link></li>
+                    </ul>
                   </li>
                   <li>
                     <Link to="/">
-                      <Button>Home Décor</Button>
+                      <Button>Home Décor <FaAngleRight className="ml-auto"/></Button>
                     </Link>
+                    <ul className="submenu shadow">
+                     <li> <Link to="/">
+                        <Button>Wall Art</Button>
+                      </Link></li>
+                      <li> <Link to="/">
+                        <Button>Table Lamps</Button>
+                      </Link></li>
+                      <li> <Link to="/">
+                        <Button>Cushions & Throws</Button>
+                      </Link></li>
+                      <li><Link to="/">
+                        <Button>Decorative Vases</Button>
+                      </Link></li>
+                      <li><Link to="/">
+                        <Button>Rugs & Carpets</Button>
+                      </Link></li>
+                    </ul>
                   </li>
                   <li>
                     <Link to="/">
-                      <Button>Gifting</Button>
+                      <Button>Gifting <FaAngleRight className="ml-auto"/></Button>
                     </Link>
+                    <ul className="submenu shadow">
+                     <li> <Link to="/">
+                        <Button>Gift Hampers</Button>
+                      </Link></li>
+                      <li> <Link to="/">
+                        <Button>Personalized Gifts</Button>
+                      </Link></li>
+                      <li> <Link to="/">
+                        <Button>Greeting Cards</Button>
+                      </Link></li>
+                      <li><Link to="/">
+                        <Button>Corporate Gifts</Button>
+                      </Link></li>
+                      <li><Link to="/">
+                        <Button>Gift Wrap & Accessories</Button>
+                      </Link></li>
+                    </ul>
                   </li>
                   <li>
                     <Link to="/">
-                      <Button>New Arrivals</Button>
+                      <Button>New Arrivals <FaAngleRight className="ml-auto"/></Button>
                     </Link>
+                    <ul className="submenu shadow">
+                     <li> <Link to="/">
+                        <Button>Skincare New Arrivals</Button>
+                      </Link></li>
+                      <li> <Link to="/">
+                        <Button>Plants New Arrivals</Button>
+                      </Link></li>
+                      <li> <Link to="/">
+                        <Button>Handicraft New Arrivals</Button>
+                      </Link></li>
+                      <li><Link to="/">
+                        <Button>Home Decor New Arrivals</Button>
+                      </Link></li>
+                      <li><Link to="/">
+                        <Button>Gifting New Arrivals</Button>
+                      </Link></li>
+                    </ul>
+                    
                   </li>
                 </ul>
               </div>
@@ -201,3 +288,4 @@ const Navigation = () => {
   );
 };
 export default Navigation;
+
