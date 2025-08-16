@@ -12,7 +12,7 @@ body {
   color: rgba(0, 0, 0, 0.8);
   overflow-x: hidden;
 }
-.bg-blue{
+.bg-blue {
   background: #233a95;
 }
 .container {
@@ -30,28 +30,40 @@ body {
     max-width: 1200px;
   }
 }
-.badge{
+.badge {
   display: inline-block;
   padding: 7px 10px;
 }
-.badge.bg-success{
+.badge.bg-success {
   background: #e5f8ed !important;
   color: #16b858 !important ;
 }
+button {
+  text-transform: capitalize !important;
+}
 
-.btn-blue{
-  background: #233a95 !important;
+.btn-blue {
+  background: #ff36c3 !important;
   color: #fff !important;
   text-transform: capitalize !important;
 }
-.btn-big{
+.btn-big {
   font-size: 17px !important;
   padding: 7px 20px !important;
   min-width: auto !important;
 }
-.btn-round{
+.btn-round {
   border-radius: 30px !important;
 }
+.btn-sml {
+  font-size: 12px !important;
+  color: #000 !important;
+  text-transform: capitalize !important;
+}
+.btn-sml svg {
+  font-size: 20px;
+}
+
 .cursor {
   cursor: pointer;
 }
@@ -337,7 +349,7 @@ nav .navPart2 {
   justify-content: flex-start !important;
   padding: 10px 20px !important;
 }
- .close_ {
+.close_ {
   position: absolute !important;
   top: 10px;
   right: 10px;
@@ -347,7 +359,7 @@ nav .navPart2 {
   height: 40px !important;
   border-radius: 50% !important;
 }
- .close_ svg {
+.close_ svg {
   font-size: 22px;
 }
 .locationModal .cityList li button.active {
@@ -422,7 +434,6 @@ nav .navPart2 ul li .submenu a button:hover {
   left: 15px;
 }
 
-
 .homeBannerSection * {
   outline: none !important;
 }
@@ -464,7 +475,7 @@ nav .navPart2 ul li .submenu a button:hover {
   cursor: pointer;
   position: relative;
 }
-.productItem .badge{
+.productItem .badge {
   display: inline-block;
   padding: 7px 10px;
   position: absolute;
@@ -479,23 +490,23 @@ nav .navPart2 ul li .submenu a button:hover {
   font-size: 15px;
   font-weight: 600;
 }
-.info .oldPrice{
+.info .oldPrice {
   font-size: 18px;
   font-weight: bold;
   color: rgba(0, 0, 0, 0.4);
   text-decoration: line-through;
 }
-.info .oldPrice .lg{
+.info .oldPrice .lg {
   font-size: 18px;
 }
-.info .newPrice{
+.info .newPrice {
   font-size: 18px;
   font-weight: bold;
 }
-.info .newPrice .lg{
-   font-size: 18px;
+.info .newPrice .lg {
+  font-size: 18px;
 }
-.productItem .actions{
+.productItem .actions {
   position: absolute;
   top: 20px;
   right: -100%;
@@ -505,54 +516,54 @@ nav .navPart2 ul li .submenu a button:hover {
   gap: 10px;
   transition: all 0.5s ease-in-out;
 }
-.productItem .actions button{
+.productItem .actions button {
   display: flex;
   align-items: center;
   justify-content: center;
   min-width: 40px !important;
   height: 40px !important;
   width: 40px !important;
-  border: 1px solid rgba(0,0,0,0.1) !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
   border-radius: 50% !important;
   background: #fff !important;
   box-shadow: 0 1px 3px rgb(0 0 0/ 12%), 0 1px 2px rgb(0 0 0 / 24%) !important;
-  transition: all 0.0s !important;
+  transition: all 0s !important;
 }
-.productItem .actions button:hover{
-  background: #233a95 !important;
+.productItem .actions button:hover {
+  background: #3cee86 !important;
 }
-.productItem .actions button svg{
-  color:#000000 !important;
+.productItem .actions button svg {
+  color: #000000 !important;
   opacity: 0.8;
   pointer-events: none;
   font-size: 20px;
 }
-.productItem .actions button:hover svg{
+.productItem .actions button:hover svg {
   color: #fff !important;
 }
-.productItem .imgWrapper:hover .actions{
+.productItem .imgWrapper:hover .actions {
   opacity: 1;
   right: 10px;
 }
-.productItem .imgWrapper{
+.productItem .imgWrapper {
   overflow: hidden;
 }
-.productItem .imgWrapper img{
+.productItem .imgWrapper img {
   transition: all 0.3s ease-in-out;
 }
-.productItem .imgWrapper:hover img{
+.productItem .imgWrapper:hover img {
   transform: scale(1.1);
 }
-.product_row .item{
-  border-right:1px solid transparent !important;
+.product_row .item {
+  border-right: 1px solid transparent !important;
 }
-.product_row .swiper-slide:last-child .productItem{
-  border: 1px solid rgba(0, 0, 0, 0.1) !important
+.product_row .swiper-slide:last-child .productItem {
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
 }
-.swiper{
+.swiper {
   padding-right: 1px !important;
 }
-.badge-primary{
+.badge-primary {
   background: #2bbef9 !important;
 }
 .homeCat {
@@ -616,23 +627,23 @@ nav .navPart2 ul li .submenu a button:hover {
   margin-top: 8px;
   font-size: 14px;
 }
-.productRow2{
+.productRow2 {
   flex-wrap: wrap;
   gap: 10px;
 }
-.productRow2 .productItem{
+.productRow2 .productItem {
   width: 24%;
   overflow: hidden;
   border-right: 1px solid rgba(0, 0, 0, 0.1) !important;
 }
 
-.bannerSec{
-  gap:15px;
+.bannerSec {
+  gap: 15px;
 }
-.sticky{
+.sticky {
   position: sticky;
-  top:10px;
-  z-index:100 ;
+  top: 10px;
+  z-index: 100;
 }
 .productDetaileModal {
   display: flex;
@@ -662,54 +673,61 @@ nav .navPart2 ul li .submenu a button:hover {
   width: 900px !important ;
 }
 
-.productModal h4{
+.productModal h4 {
   font-size: 20px !important;
-  color: rgba(0,0,0,0.8) !important;
+  color: rgba(0, 0, 0, 0.8) !important;
 }
 
-.zoomSlider{
+.zoomSlider {
   padding-top: 30px;
 }
-.zoomSlider .slick-slide{
+.zoomSlider .slick-slide {
   padding-right: 20px !important;
 }
-.zoomSlider *{
+.zoomSlider * {
   outline: none !important;
 }
-.zoomSlider .item{
+.zoomSlider .item {
   border: 2px solid transparent !important;
   overflow: hidden;
   border-radius: 15px;
   cursor: pointer;
 }
-.zoomSlider .slick-current .item{
+.zoomSlider .slick-current .item {
   border: 2px solid #3bb77e !important;
 }
-.zoomSlider .slick-arrow{
+.zoomSlider .slick-arrow {
   top: 55% !important;
   zoom: 80% !important;
 }
-.zoomSlider .slick-arrow.slick-next{
+.zoomSlider .slick-arrow.slick-next {
   right: -2% !important;
 }
-.zoomSlider .slick-arrow.slick-prev{
+.zoomSlider .slick-arrow.slick-prev {
   right: -5% !important;
 }
-.productZoom{
+.productZoom {
   width: 100%;
   height: auto;
-  border: 1px solid rgba(0,0,0,0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   padding: 0px;
   overflow: hidden;
   border-radius: 15px;
 }
-.zoomSliderBig{
+.productZoom .badge {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 100;
+}
+.zoomSliderBig {
   width: 100% !important;
 }
-.quantityDrop{
+.quantityDrop {
   width: 150px;
+  gap: 10px;
 }
-.quantityDrop button{
+.quantityDrop button {
   min-width: 40px !important;
   width: 40px !important;
   height: 40px !important;
@@ -718,6 +736,84 @@ nav .navPart2 ul li .submenu a button:hover {
   border: 1px solid rgba(0, 0, 0, 0.1) !important;
   color: #000;
 }
-.quantityDrop button svg{
+.quantityDrop button svg {
   color: #000 !important;
+}
+.quantityDrop input {
+  width: 30px;
+  border: 0px;
+  background: transparent;
+  outline: none !important;
+  text-align: center;
+}
+.productModal .actions button {
+  color: #000 !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+  font-size: 10px !important;
+}
+.productModal .actions button svg {
+  font-size: 15px !important;
+}
+.newsLetterSection {
+  width: 100%;
+  height: auto;
+  background: #3bb77e;
+  margin: 10px 0px !important;
+  display: flex;
+  align-items: center; /* vertically center text and image */
+  justify-content: space-between; /* space between text and image */
+  padding: 50px 0px; /* optional, for spacing */
+}
+.newsLetterSection p {
+  font-size: 18px;
+}
+.newsLetterSection h3 {
+  font-size: 35px;
+  font-weight: bold;
+}
+.newsLetterSection p .text-light {
+  color: #fff !important;
+  opacity: 0.5;
+  font-size: 15px;
+}
+.newsLetterSection img {
+  max-width: 500px; /* adjust size as needed */
+  height: auto;
+  position: static; /* remove absolute positioning */
+  margin-left: 50px !important;
+}
+.newsLetterSection form {
+  width: 100%;
+  height: 60px;
+  background: #fff;
+  padding: 13px;
+  position: relative;
+  border-radius: 10px;
+}
+.newsLetterSection form svg {
+  position: absolute;
+  top: 17px;
+  left: 10px;
+  font-size: 25px;
+  opacity: 0.3;
+}
+.newsLetterSection form input {
+  width: 100%;
+  height: 100%;
+  background: #fff !important;
+  outline: none;
+  border: 0px !important;
+  padding-left: 40px;
+  padding-right: 200px;
+}
+.newsLetterSection form  button{
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  background: #3bb77e !important;
+  font-size: 14px !important;
+  padding: 10px 25px !important;
+  color: #fff !important;
+  text-transform: capitalize !important;
+  font-weight: 600 !important;
 }
