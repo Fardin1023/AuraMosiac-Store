@@ -9,6 +9,7 @@ const ProductItem = () => {
   const context = useContext(MyContext);
 
   const viewProductDetails = (id) => {
+    context.setProductId(id);
     context.setisOpenProductModal(true);
   };
 
@@ -60,6 +61,7 @@ export const ProductItem2 = () => {
   const context = useContext(MyContext);
 
   const viewProductDetails = (id) => {
+    context.setProductId(id);
     context.setisOpenProductModal(true);
   };
   return (
@@ -101,6 +103,12 @@ export const ProductItem2 = () => {
 };
 
 export const ProductItem3 = () => {
+  const context = useContext(MyContext);
+  const viewProductDetails = (id) => {
+    context.setProductId(id);
+    context.setisOpenProductModal(true);
+  };
+
   return (
     <div className="item productItem">
       <div className="imgWrapper">
@@ -111,7 +119,7 @@ export const ProductItem3 = () => {
         />
         <span className="badge badge-primary">44%</span>
         <div className="actions">
-          <Button>
+          <Button onClick={() => viewProductDetails(3)}>
             <BsArrowsFullscreen />{" "}
           </Button>
           <Button>
@@ -140,6 +148,11 @@ export const ProductItem3 = () => {
 };
 
 export const ProductItem4 = () => {
+  const context = useContext(MyContext);
+  const viewProductDetails = (id) => {
+    context.setProductId(id);
+    context.setisOpenProductModal(true);
+  };
   return (
     <div className="item productItem">
       <div className="imgWrapper">
@@ -150,7 +163,7 @@ export const ProductItem4 = () => {
         />
         <span className="badge badge-primary">28%</span>
         <div className="actions">
-          <Button>
+          <Button onClick={() => viewProductDetails(4)}>
             <BsArrowsFullscreen />{" "}
           </Button>
           <Button>
@@ -178,6 +191,11 @@ export const ProductItem4 = () => {
   );
 };
 export const ProductItem5 = () => {
+  const context = useContext(MyContext);
+  const viewProductDetails = (id) => {
+    context.setProductId(id);
+    context.setisOpenProductModal(true);
+  };
   return (
     <div className="item productItem">
       <div className="imgWrapper">
@@ -188,7 +206,7 @@ export const ProductItem5 = () => {
         />
         <span className="badge badge-primary">40%</span>
         <div className="actions">
-          <Button>
+          <Button onClick={() => viewProductDetails(5)}>
             <BsArrowsFullscreen />{" "}
           </Button>
           <Button>
@@ -216,6 +234,11 @@ export const ProductItem5 = () => {
   );
 };
 export const ProductItem6 = () => {
+  const context = useContext(MyContext);
+  const viewProductDetails = (id) => {
+    context.setProductId(id);
+    context.setisOpenProductModal(true);
+  };
   return (
     <div className="item productItem">
       <div className="imgWrapper">
@@ -226,7 +249,7 @@ export const ProductItem6 = () => {
         />
         <span className="badge badge-primary">8%</span>
         <div className="actions">
-          <Button>
+          <Button onClick={() => viewProductDetails(6)}>
             <BsArrowsFullscreen />{" "}
           </Button>
           <Button>
@@ -254,6 +277,11 @@ export const ProductItem6 = () => {
   );
 };
 export const ProductItem7 = () => {
+  const context = useContext(MyContext);
+  const viewProductDetails = (id) => {
+    context.setProductId(id);
+    context.setisOpenProductModal(true);
+  };
   return (
     <div className="item productItem">
       <div className="imgWrapper">
@@ -264,7 +292,7 @@ export const ProductItem7 = () => {
         />
         <span className="badge badge-primary">5%</span>
         <div className="actions">
-          <Button>
+          <Button onClick={() => viewProductDetails(7)}>
             <BsArrowsFullscreen />{" "}
           </Button>
           <Button>
@@ -292,6 +320,11 @@ export const ProductItem7 = () => {
   );
 };
 export const ProductItem8 = () => {
+  const context = useContext(MyContext);
+  const viewProductDetails = (id) => {
+    context.setProductId(id);
+    context.setisOpenProductModal(true);
+  };
   return (
     <div className="item productItem">
       <div className="imgWrapper">
@@ -302,7 +335,7 @@ export const ProductItem8 = () => {
         />
         <span className="badge badge-primary">6%</span>
         <div className="actions">
-          <Button>
+          <Button onClick={() => viewProductDetails(8)}>
             <BsArrowsFullscreen />{" "}
           </Button>
           <Button>
@@ -330,6 +363,11 @@ export const ProductItem8 = () => {
   );
 };
 export const ProductItem9 = () => {
+  const context = useContext(MyContext);
+  const viewProductDetails = (id) => {
+    context.setProductId(id);
+    context.setisOpenProductModal(true);
+  };
   return (
     <div className="item productItem">
       <div className="imgWrapper">
@@ -340,7 +378,7 @@ export const ProductItem9 = () => {
         />
         <span className="badge badge-primary">15%</span>
         <div className="actions">
-          <Button>
+          <Button onClick={() => viewProductDetails(9)}>
             <BsArrowsFullscreen />{" "}
           </Button>
           <Button>
@@ -368,6 +406,11 @@ export const ProductItem9 = () => {
   );
 };
 export const ProductItem10 = () => {
+  const context = useContext(MyContext);
+  const viewProductDetails = (id) => {
+    context.setProductId(id);
+    context.setisOpenProductModal(true);
+  };
   return (
     <div className="item productItem">
       <div className="imgWrapper">
@@ -378,7 +421,7 @@ export const ProductItem10 = () => {
         />
         <span className="badge badge-primary">25%</span>
         <div className="actions">
-          <Button>
+          <Button onClick={() => viewProductDetails(10)}>
             <BsArrowsFullscreen />{" "}
           </Button>
           <Button>
@@ -406,6 +449,11 @@ export const ProductItem10 = () => {
   );
 };
 export const ProductItem11 = () => {
+  const context = useContext(MyContext);
+  const viewProductDetails = (id) => {
+    context.setProductId(id);
+    context.setisOpenProductModal(true);
+  };
   return (
     <div className="item productItem">
       <div className="imgWrapper">
@@ -416,7 +464,7 @@ export const ProductItem11 = () => {
         />
         <span className="badge badge-primary">48%</span>
         <div className="actions">
-          <Button>
+          <Button onClick={() => viewProductDetails(11)}>
             <BsArrowsFullscreen />{" "}
           </Button>
           <Button>
@@ -444,6 +492,11 @@ export const ProductItem11 = () => {
   );
 };
 export const ProductItem12 = () => {
+  const context = useContext(MyContext);
+  const viewProductDetails = (id) => {
+    context.setProductId(id);
+    context.setisOpenProductModal(true);
+  };
   return (
     <div className="item productItem">
       <div className="imgWrapper">
@@ -454,7 +507,7 @@ export const ProductItem12 = () => {
         />
         <span className="badge badge-primary">12%</span>
         <div className="actions">
-          <Button>
+          <Button onClick={() => viewProductDetails(12)}>
             <BsArrowsFullscreen />{" "}
           </Button>
           <Button>
@@ -482,6 +535,11 @@ export const ProductItem12 = () => {
   );
 };
 export const ProductItem13 = () => {
+  const context = useContext(MyContext);
+  const viewProductDetails = (id) => {
+    context.setProductId(id);
+    context.setisOpenProductModal(true);
+  };
   return (
     <div className="item productItem">
       <div className="imgWrapper">
@@ -492,7 +550,7 @@ export const ProductItem13 = () => {
         />
         <span className="badge badge-primary">5%</span>
         <div className="actions">
-          <Button>
+          <Button onClick={() => viewProductDetails(13)}>
             <BsArrowsFullscreen />{" "}
           </Button>
           <Button>
@@ -520,6 +578,11 @@ export const ProductItem13 = () => {
   );
 };
 export const ProductItem14 = () => {
+  const context = useContext(MyContext);
+  const viewProductDetails = (id) => {
+    context.setProductId(id);
+    context.setisOpenProductModal(true);
+  };
   return (
     <div className="item productItem">
       <div className="imgWrapper">
@@ -530,7 +593,7 @@ export const ProductItem14 = () => {
         />
         <span className="badge badge-primary">10%</span>
         <div className="actions">
-          <Button>
+          <Button onClick={() => viewProductDetails(14)}>
             <BsArrowsFullscreen />{" "}
           </Button>
           <Button>
@@ -558,6 +621,11 @@ export const ProductItem14 = () => {
   );
 };
 export const ProductItem15 = () => {
+  const context = useContext(MyContext);
+  const viewProductDetails = (id) => {
+    context.setProductId(id);
+    context.setisOpenProductModal(true);
+  };
   return (
     <div className="item productItem">
       <div className="imgWrapper">
@@ -568,7 +636,7 @@ export const ProductItem15 = () => {
         />
         <span className="badge badge-primary">25%</span>
         <div className="actions">
-          <Button>
+          <Button onClick={() => viewProductDetails(15)}>
             <BsArrowsFullscreen />{" "}
           </Button>
           <Button>
@@ -596,6 +664,11 @@ export const ProductItem15 = () => {
   );
 };
 export const ProductItem16 = () => {
+  const context = useContext(MyContext);
+  const viewProductDetails = (id) => {
+    context.setProductId(id);
+    context.setisOpenProductModal(true);
+  };
   return (
     <div className="item productItem">
       <div className="imgWrapper">
@@ -606,7 +679,7 @@ export const ProductItem16 = () => {
         />
         <span className="badge badge-primary">8%</span>
         <div className="actions">
-          <Button>
+          <Button onClick={() => viewProductDetails(16)}>
             <BsArrowsFullscreen />{" "}
           </Button>
           <Button>
@@ -633,4 +706,5 @@ export const ProductItem16 = () => {
     </div>
   );
 };
+
 
