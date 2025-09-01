@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import ProductZoom from "../../components/ProductZoom";
 import Rating from "@mui/material/Rating";
 import QuantityBox from "../../components/QuantityBox";
@@ -5,15 +7,34 @@ import Button from "@mui/material/Button";
 import { FaCartShopping } from "react-icons/fa6";
 import { FaRegHeart } from "react-icons/fa";
 import { GoGitCompare } from "react-icons/go";
-import Tooltip from '@mui/material/Tooltip';
-import { useState } from "react";
+import Tooltip from "@mui/material/Tooltip";
 import RelatedProducts from "./RelatedProducts";
+import RecommendedProducts from "../../components/RecommendedProducts";
 
 const ProductDetails = () => {
+  const { id } = useParams(); // get product id from URL
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
+
   const [activeTab, setActiveTab] = useState("description");
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
   const [name, setName] = useState("");
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const res = await fetch(`http://localhost:4000/api/products/${id}`);
+        const data = await res.json();
+        setProduct(data);
+      } catch (err) {
+        console.error("Error fetching product:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProduct();
+  }, [id]);
 
   const handleCommentSubmit = (e) => {
     e.preventDefault();
@@ -27,47 +48,54 @@ const ProductDetails = () => {
     setRating(0);
   };
 
+  if (loading) return <p className="text-center">Loading...</p>;
+  if (!product) return <p className="text-center">Product not found.</p>;
+
   return (
     <section className="productDetails section">
       <div className="container">
         <div className="row">
           <div className="col-md-4 pl-5">
-            <ProductZoom />
+            {/* ProductZoom should display product.images */}
+            <ProductZoom images={product.images} />
           </div>
           <div className="col-md-7 pl-5 pr-5">
-            <h2 className="hd text-capitalize">
-              Himalaya Natural Glow Saffron Face Wash
-            </h2>
+            <h2 className="hd text-capitalize">{product.name}</h2>
             <ul className="list list-inline d-flex align-items-center">
               <li className="list-inline-item">
                 <div className="d-flex align-items-center">
-                  <span className="text-dark mr-2">Brands :</span>
-                  <span>Himalaya</span>
+                  <span className="text-dark mr-2">Brand :</span>
+                  <span>{product.brand || "No Brand"}</span>
                 </div>
               </li>
               <li className="list-inline-item ">
                 <div className="d-flex align-items-center">
                   <Rating
                     name="read-only"
-                    value={3.5}
+                    value={product.rating || 0}
                     precision={0.5}
                     readOnly
                     size="small"
                   />
-                  <span className="text-dark cursor ml-2">1 REVIEW</span>
+                  <span className="text-dark cursor ml-2">
+                    {product.numReviews || 0} REVIEWS
+                  </span>
                 </div>
               </li>
             </ul>
 
-            <div class="d-flex info mb-2">
-              <span class="oldPrice">৳200.00</span>
-              <span class="newPrice text-danger ml-2">৳99.00</span>
+            <div className="d-flex info mb-2">
+              {product.oldPrice && (
+                <span className="oldPrice">৳{product.oldPrice}</span>
+              )}
+              <span className="newPrice text-danger ml-2">
+                ৳{product.price}
+              </span>
             </div>
-            <span className="badge badge-success">IN STOCK</span>
-            <p className="mt-3">
-              Himalaya Brightening Vitamin C Bluberry Face Wash-100ml Country of
-              Origin: Bangladesh
-            </p>
+            <span className="badge badge-success">
+              {product.countInStock > 0 ? "IN STOCK" : "OUT OF STOCK"}
+            </span>
+            <p className="mt-3">{product.description}</p>
 
             <div className="d-flex align-items-center mt-4">
               <QuantityBox />
@@ -93,75 +121,65 @@ const ProductDetails = () => {
         <div className="row mt-5">
           <div className="col-md-12">
             <ul className="nav nav-tabs productTabs">
-              <li 
-                className={`nav-item ${activeTab === "description" ? "active" : ""}`}
+              <li
+                className={`nav-item ${
+                  activeTab === "description" ? "active" : ""
+                }`}
                 onClick={() => setActiveTab("description")}
               >
                 Description
               </li>
-              <li 
-                className={`nav-item ${activeTab === "additional" ? "active" : ""}`}
+              <li
+                className={`nav-item ${
+                  activeTab === "additional" ? "active" : ""
+                }`}
                 onClick={() => setActiveTab("additional")}
               >
                 Additional Info
               </li>
-              <li 
+              <li
                 className={`nav-item ${activeTab === "vendor" ? "active" : ""}`}
                 onClick={() => setActiveTab("vendor")}
               >
                 Vendor
               </li>
-              <li 
+              <li
                 className={`nav-item ${activeTab === "reviews" ? "active" : ""}`}
                 onClick={() => setActiveTab("reviews")}
               >
-                Reviews (3)
+                Reviews ({product.numReviews || 0})
               </li>
             </ul>
 
             <div className="tab-content p-4 border">
               {activeTab === "description" && (
                 <div>
-                  <p>
-                    Himalaya Natural Glow Saffron Face Wash helps to cleanse,
-                    brighten, and refresh your skin naturally with saffron
-                    extracts. Suitable for daily use.
-                  </p>
-                  <ul>
-                    <li>Type Of Packing: Bottle</li>
-                    <li>Color: Green, Pink, Powder Blue, Purple</li>
-                    <li>Quantity Per Case: 100ml</li>
-                    <li>Ethyl Alcohol: 70%</li>
-                    <li>Piece In One: Carton</li>
-                  </ul>
+                  <p>{product.description}</p>
                 </div>
               )}
               {activeTab === "additional" && (
                 <div>
-                  <p>Additional product specifications and manufacturing details will go here.</p>
+                  <p>{product.additionalInfo || "No additional info."}</p>
                 </div>
               )}
               {activeTab === "vendor" && (
                 <div>
-                  <p>Sold by: Himalaya Official Store</p>
-                  <p>Trusted vendor with 98% positive reviews.</p>
+                  <p>Sold by: {product.vendor || "Default Vendor"}</p>
                 </div>
               )}
               {activeTab === "reviews" && (
                 <div>
                   <h5>Customer Reviews</h5>
-                  <div className="reviewBox">
-                    <strong>Rahim</strong> ⭐⭐⭐⭐☆
-                    <p>Good face wash, really works on oily skin.</p>
-                  </div>
-                  <div className="reviewBox">
-                    <strong>Karim</strong> ⭐⭐⭐⭐⭐
-                    <p>Excellent product! Refreshing smell and smooth skin.</p>
-                  </div>
-                  <div className="reviewBox">
-                    <strong>Ayesha</strong> ⭐⭐⭐⭐☆
-                    <p>Nice but a bit dry for my skin type.</p>
-                  </div>
+                  {product.reviews && product.reviews.length > 0 ? (
+                    product.reviews.map((rev, idx) => (
+                      <div key={idx} className="reviewBox">
+                        <strong>{rev.name}</strong> ⭐⭐⭐⭐☆
+                        <p>{rev.comment}</p>
+                      </div>
+                    ))
+                  ) : (
+                    <p>No reviews yet.</p>
+                  )}
 
                   {/* Comment Form */}
                   <div className="commentForm mt-4">
@@ -188,7 +206,10 @@ const ProductDetails = () => {
                         onChange={(e) => setComment(e.target.value)}
                         className="form-control mb-2"
                       ></textarea>
-                      <Button type="submit" className="btn-green btn-lg btn-big btn-round">
+                      <Button
+                        type="submit"
+                        className="btn-green btn-lg btn-big btn-round"
+                      >
                         Submit Review
                       </Button>
                     </form>
@@ -199,9 +220,10 @@ const ProductDetails = () => {
           </div>
         </div>
         {/* ------------------- End Tabs Section ------------------- */}
-        <br/>
-        <RelatedProducts title="RELATED PRODUCTS"/>
-        <RelatedProducts title="RECENTLY VIEWED PRODUCTS"/>
+        <br />
+        <RelatedProducts title="RELATED PRODUCTS" />
+        <RelatedProducts title="RECENTLY VIEWED PRODUCTS" />
+        <RecommendedProducts currentProduct={product} />
       </div>
     </section>
   );
