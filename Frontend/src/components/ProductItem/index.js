@@ -1,50 +1,139 @@
 import Rating from "@mui/material/Rating";
 import { BsArrowsFullscreen } from "react-icons/bs";
 import Button from "@mui/material/Button";
-import { FaRegHeart } from "react-icons/fa";
-import { useContext} from "react";
+import { FaRegHeart, FaHeart } from "react-icons/fa";
+import { useContext } from "react";
 import { MyContext } from "../../App";
+import Swal from "sweetalert2";
 
+const ProductItem = ({ product, data, item, itemView }) => {
+  const { setSelectedProduct, setisOpenProductModal, addToWishlist, removeFromWishlist, isWishlisted } =
+    useContext(MyContext);
 
-const ProductItem =()=>{
+  // accept product via any prop shape without breaking existing usage
+  const p = product || data || item || {};
 
-  const context=useContext(MyContext);
-  const viewProductDetails=(id)=>{
-    context.setisOpenProductModal(true);
-  }
+  const id = p._id || p.id;
+  const name = p.name || p.title || "Unnamed Product";
+  const image =
+    (Array.isArray(p.images) && p.images[0]) ||
+    p.thumbnail ||
+    p.image ||
+    "https://via.placeholder.com/400x400?text=No+Image";
 
-  
+  const price = Number(
+    p.price != null ? p.price : p.newPrice != null ? p.newPrice : 0
+  );
+  const oldPrice = p.oldPrice != null ? Number(p.oldPrice) : undefined;
 
-  
-  return(
-    <>
-      <div className="item productItem">
+  const computedDiscount =
+    oldPrice && price && oldPrice > price
+      ? Math.round(((oldPrice - price) / oldPrice) * 100)
+      : null;
+  const discount = p.discount != null ? Number(p.discount) : computedDiscount;
+
+  const inStock =
+    typeof p.countInStock === "number"
+      ? p.countInStock > 0
+      : p.stock > 0 || !!p.inStock;
+
+  const ratingRaw =
+    p.rating != null
+      ? Number(p.rating)
+      : p.ratings != null
+      ? Number(p.ratings)
+      : p.averageRating != null
+      ? Number(p.averageRating)
+      : 0;
+
+  const rating = isNaN(ratingRaw) ? 0 : Math.max(0, Math.min(5, ratingRaw));
+
+  const numReviews =
+    p.numReviews != null
+      ? Number(p.numReviews)
+      : Array.isArray(p.reviews)
+      ? p.reviews.length
+      : undefined;
+
+  const money = (v) =>
+    isNaN(Number(v)) ? "0" : Number(v).toFixed(2).replace(/\.00$/, "");
+
+  const viewProductDetails = () => {
+    if (id) {
+      window.location.href = `/product/${id}`;
+    } else {
+      setSelectedProduct(p);
+      setisOpenProductModal(true);
+    }
+  };
+
+  const wished = isWishlisted(id);
+
+  const toggleWishlist = () => {
+    if (!id) return;
+    if (wished) {
+      removeFromWishlist(id);
+    } else {
+      const ok = addToWishlist(p); // returns false if gated
+      if (!ok) return;
+      Swal.fire({
+        toast: true,
+        position: "top-end",
+        icon: "success",
+        title: "Added to wishlist",
+        showConfirmButton: false,
+        timer: 1400,
+      });
+    }
+  };
+
+  return (
+    <div className={`item productItem ${itemView || ""}`}>
       <div className="imgWrapper">
-        <img src="https://bk.shajgoj.com/storage/2025/07/32567.jpg" alt="p1"className="w-100"/>
+        <img src={image} alt={name} className="w-100" />
 
-        <span className="badge badge-primary">51%</span>
+        {discount ? <span className="badge badge-primary">{discount}%</span> : null}
 
         <div className="actions">
-          <Button onClick={()=>viewProductDetails(1)}><BsArrowsFullscreen /></Button>
-          <Button><FaRegHeart /></Button>
-          </div>
+          <Button onClick={viewProductDetails}>
+            <BsArrowsFullscreen />
+          </Button>
+          <Button onClick={toggleWishlist} className={wished ? "active" : ""} aria-label="Add to wishlist">
+            {wished ? <FaHeart /> : <FaRegHeart />}
+          </Button>
+        </div>
       </div>
 
       <div className="info">
-        <h4>Himalaya Brightening Vitamin C Strawberry Face Wash</h4>
-        <span className="text-success d-block">In Stock</span>
-        <Rating className="mt-2 mb-2" name="read-only" value={5} readOnly size="small" precision={0.5}/>
+        <h4>{name}</h4>
 
-        <div className="d-flex"></div>
-        <span className="oldPrice">৳200.00</span>
-        <span className="newPrice text-danger ml-2">৳99.00</span>
+        <span className={inStock ? "text-success d-block" : "text-danger d-block"}>
+          {inStock ? "In Stock" : "Out of Stock"}
+        </span>
+
+        <div className="d-flex align-items-center">
+          <Rating
+            className="mt-2 mb-2"
+            name="read-only"
+            value={rating}
+            readOnly
+            size="small"
+            precision={0.5}
+          />
+          {numReviews != null && <small className="text-muted ml-2">({numReviews})</small>}
+        </div>
+
+        <div className="d-flex align-items-center">
+          {oldPrice != null && oldPrice > price && (
+            <span className="oldPrice">৳{money(oldPrice)}</span>
+          )}
+          <span className={`newPrice text-danger ${oldPrice ? "ml-2" : ""}`}>
+            ৳{money(price)}
+          </span>
+        </div>
       </div>
     </div>
-    
+  );
+};
 
-    {/*<ProductModal/>*/}
-    </>
-  )
-
-}
 export default ProductItem;
