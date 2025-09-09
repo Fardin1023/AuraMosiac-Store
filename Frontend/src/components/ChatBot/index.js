@@ -1,179 +1,304 @@
-import { useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { FaRobot } from "react-icons/fa";
 import { IoMdSend } from "react-icons/io";
-import axios from "axios";
+import { IoClose } from "react-icons/io5";
 import ReactMarkdown from "react-markdown";
 import { Link } from "react-router-dom";
+import { aiChat, aiRecommend } from "../../api/api";
 
+/**
+ * Animated AI shopping assistant
+ * - Asks quick taste questions via chips
+ * - Recommends products / brands / categories
+ * - Shows deals/featured items
+ * - Supports rich "blocks" (text, products, chips) from backend
+ */
 const ChatBot = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState([
-    { from: "bot", text: "Hi 👋! Ask me about products, stock, or help." },
-  ]);
+  const [open, setOpen] = useState(false);
+  const [sending, setSending] = useState(false);
   const [input, setInput] = useState("");
+  const [messages, setMessages] = useState(() => ([
+    {
+      from: "bot",
+      type: "text",
+      text:
+        "Hi 👋 I’m your shopping buddy.\n\n" +
+        "Tell me what you’re into or tap a quick option below. I can suggest **products, brands, categories** and today’s **offers**.",
+    },
+    {
+      from: "bot",
+      type: "chips",
+      chips: [
+        "Show deals under Tk 500",
+        "Trending Skincare",
+        "Gift ideas (Handcraft)",
+        "Plants for home",
+        "Best rated this week",
+      ],
+    },
+  ]));
 
-  const sendMessage = async () => {
-    if (!input.trim()) return;
-
-    const newMessages = [...messages, { from: "user", text: input }];
-    setMessages(newMessages);
-
+  // Lightweight "taste" (kept in memory and persisted in localStorage)
+  const [taste, setTaste] = useState(() => {
     try {
-      const res = await axios.post("http://localhost:4000/api/ai/chat", {
-        message: input,
-      });
-
-      setMessages((prev) => [...prev, { from: "bot", text: res.data.reply }]);
-    } catch (err) {
-      console.error(err);
-      setMessages((prev) => [
-        ...prev,
-        { from: "bot", text: "⚠️ Sorry, something went wrong!" },
-      ]);
+      const raw = localStorage.getItem("aura_ai_taste");
+      return raw ? JSON.parse(raw) : { categories: [], brands: [], budget: {}, minRating: 0 };
+    } catch {
+      return { categories: [], brands: [], budget: {}, minRating: 0 };
     }
+  });
 
-    setInput("");
+  useEffect(() => {
+    localStorage.setItem("aura_ai_taste", JSON.stringify(taste));
+  }, [taste]);
+
+  const bodyRef = useRef(null);
+  const scrollToBottom = () => {
+    if (!bodyRef.current) return;
+    bodyRef.current.scrollTop = bodyRef.current.scrollHeight;
+  };
+  useEffect(scrollToBottom, [messages, sending, open]);
+
+  const appendBlockResponse = (blocks) => {
+    // convert backend blocks to message list entries
+    const next = [];
+    (blocks || []).forEach((b) => {
+      if (b.type === "text") {
+        next.push({ from: "bot", type: "text", text: b.text || "" });
+      } else if (b.type === "products") {
+        next.push({
+          from: "bot",
+          type: "products",
+          title: b.title || "Recommended",
+          items: (b.items || []).map((p) => ({
+            id: p._id || p.id,
+            name: p.name,
+            price: p.price,
+            image:
+              (Array.isArray(p.images) && p.images[0]) ||
+              p.image ||
+              "https://via.placeholder.com/400x300?text=Product",
+            link: `/product/${p._id || p.id}`,
+            badge: p.badge || "",
+          })),
+        });
+      } else if (b.type === "chips") {
+        next.push({ from: "bot", type: "chips", chips: b.items || [] });
+      }
+    });
+    if (next.length) setMessages((prev) => [...prev, ...next]);
   };
 
+  const sendToAI = async (text) => {
+    if (!text.trim()) return;
+    setSending(true);
+    try {
+      const res = await aiChat({ message: text, taste });
+      const { reply, blocks } = res.data || {};
+      if (blocks && Array.isArray(blocks)) {
+        appendBlockResponse(blocks);
+      } else if (reply) {
+        setMessages((prev) => [...prev, { from: "bot", type: "text", text: reply }]);
+      } else {
+        setMessages((prev) => [
+          ...prev,
+          { from: "bot", type: "text", text: "I didn’t get a result, try another query?" },
+        ]);
+      }
+    } catch (e) {
+      setMessages((prev) => [
+        ...prev,
+        { from: "bot", type: "text", text: "⚠️ Sorry, something went wrong." },
+      ]);
+    } finally {
+      setSending(false);
+    }
+  };
+
+  const onSend = async () => {
+    if (!input.trim() || sending) return;
+    const text = input.trim();
+    setMessages((prev) => [...prev, { from: "user", type: "text", text }]);
+    setInput("");
+    await sendToAI(text);
+  };
+
+  const onChip = async (text) => {
+    if (sending) return;
+    setMessages((prev) => [...prev, { from: "user", type: "text", text }]);
+    await sendToAI(text);
+  };
+
+  // “One-shot” taste recommendation (grouped)
+  const doTasteRecommend = async () => {
+    if (sending) return;
+    try {
+      setSending(true);
+      const res = await aiRecommend({ taste });
+      const { blocks } = res.data || {};
+      if (blocks) appendBlockResponse(blocks);
+    } catch {
+      setMessages((prev) => [
+        ...prev,
+        { from: "bot", type: "text", text: "Couldn’t fetch personalized picks right now." },
+      ]);
+    } finally {
+      setSending(false);
+    }
+  };
+
+  // Helpers to quickly set taste with small UI hints
+  const setBudget = (max) => setTaste((t) => ({ ...t, budget: { ...(t.budget || {}), max } }));
+  const addCategory = (c) =>
+    setTaste((t) => ({
+      ...t,
+      categories: [...new Set([...(t.categories || []), c])].slice(0, 6),
+    }));
+  const setMinRating = (r) => setTaste((t) => ({ ...t, minRating: r }));
+
+  const floatingHints = useMemo(
+    () => [
+      { label: "Budget ≤ Tk 500", on: () => setBudget(500) },
+      { label: "Skincare", on: () => addCategory("Skincare") },
+      { label: "Handcraft gifts", on: () => addCategory("Handcraft") },
+      { label: "Rating 4.0+", on: () => setMinRating(4) },
+      { label: "Get picks", on: () => doTasteRecommend() },
+    ],
+    []
+  );
+
   return (
-    <div style={{ position: "fixed", bottom: "20px", right: "20px", zIndex: 9999 }}>
-      {!isOpen && (
-        <button
-          onClick={() => setIsOpen(true)}
-          style={{
-            background: "#ff4d6d",
-            borderRadius: "50%",
-            width: "60px",
-            height: "60px",
-            border: "none",
-            boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
-            cursor: "pointer",
-          }}
-        >
-          <FaRobot size={28} color="white" />
+    <div className="cb-root">
+      {/* Floating FAB button */}
+      {!open && (
+        <button className="cb-fab bounceIn" onClick={() => setOpen(true)} title="AI Assistant">
+          <FaRobot size={22} />
         </button>
       )}
 
-      {isOpen && (
-        <div
-          style={{
-            width: "320px",
-            height: "420px",
-            background: "#fff",
-            borderRadius: "15px",
-            boxShadow: "0 4px 25px rgba(0,0,0,0.2)",
-            display: "flex",
-            flexDirection: "column",
-            overflow: "hidden",
-          }}
-        >
-          <div
-            style={{
-              background: "#ff4d6d",
-              color: "#fff",
-              padding: "12px",
-              fontWeight: "bold",
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <span>AI Assistant</span>
-            <button
-              onClick={() => setIsOpen(false)}
-              style={{
-                background: "transparent",
-                border: "none",
-                color: "#fff",
-                fontSize: "18px",
-                cursor: "pointer",
-              }}
-            >
-              ✖
+      {/* Chat window */}
+      {open && (
+        <div className="cb-window slideUp">
+          <div className="cb-header">
+            <div className="cb-bot">
+              <div className="cb-avatar"><FaRobot size={18} /></div>
+              <div className="cb-meta">
+                <div className="cb-title">AI Assistant</div>
+                <div className="cb-sub">Ask for products, brands, deals</div>
+              </div>
+            </div>
+            <button className="cb-close" onClick={() => setOpen(false)} title="Close">
+              <IoClose size={20} />
             </button>
           </div>
 
-          {/* Messages */}
-          <div
-            style={{
-              flex: 1,
-              padding: "10px",
-              overflowY: "auto",
-              background: "#f9f9f9",
-            }}
-          >
-            {messages.map((msg, i) => (
-              <div
-                key={i}
-                style={{
-                  textAlign: msg.from === "user" ? "right" : "left",
-                  marginBottom: "10px",
-                }}
-              >
-                <span
-                  style={{
-                    display: "inline-block",
-                    padding: "8px 12px",
-                    borderRadius: "15px",
-                    background: msg.from === "user" ? "#ff4d6d" : "#e6e6e6",
-                    color: msg.from === "user" ? "white" : "black",
-                    maxWidth: "80%",
-                  }}
-                >
-                  {msg.from === "bot" ? (
-                    <ReactMarkdown
-                      components={{
-                        a: ({ href, children }) => {
-                          if (href.startsWith("/product/") || href.startsWith("/category/") || href.startsWith("/brand/")) {
-                            return (
-                              <Link to={href} className="text-blue-600 underline">
-                                {children}
-                              </Link>
-                            );
-                          }
-                          return (
-                            <a href={href} target="_blank" rel="noreferrer" className="text-blue-600 underline">
-                              {children}
-                            </a>
-                          );
-                        },
-                      }}
-                    >
-                      {msg.text}
-                    </ReactMarkdown>
-                  ) : (
-                    msg.text
-                  )}
-                </span>
-              </div>
+          {/* Taste hint strip */}
+          <div className="cb-taste">
+            {floatingHints.map((h) => (
+              <button key={h.label} className="cb-taste-chip" onClick={h.on}>
+                {h.label}
+              </button>
             ))}
           </div>
 
+          {/* Messages */}
+          <div className="cb-body" ref={bodyRef}>
+            {messages.map((m, idx) => {
+              if (m.type === "products") {
+                return (
+                  <div key={idx} className="cb-row">
+                    <div className="bubble bot">
+                      <div className="cb-block-title">{m.title}</div>
+                      <div className="cb-grid">
+                        {m.items.map((p) => (
+                          <div className="cb-card" key={p.id}>
+                            <div className={`cb-badge ${p.badge ? "show" : ""}`}>{p.badge}</div>
+                            <img src={p.image} alt={p.name} />
+                            <div className="cb-card-name">{p.name}</div>
+                            <div className="cb-card-price">৳{Number(p.price || 0).toFixed(0)}</div>
+                            <Link to={p.link} className="cb-card-btn">View</Link>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                );
+              }
+
+              if (m.type === "chips") {
+                return (
+                  <div key={idx} className="cb-row">
+                    <div className="bubble bot">
+                      <div className="chips">
+                        {m.chips.map((c, i) => (
+                          <button key={i} className="chip" onClick={() => onChip(c)}>
+                            {c}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                );
+              }
+
+              // text bubble
+              return (
+                <div key={idx} className={"cb-row " + (m.from === "user" ? "right" : "")}>
+                  <div className={"bubble " + (m.from === "user" ? "user" : "bot")}>
+                    {m.from === "bot" ? (
+                      <ReactMarkdown
+                        components={{
+                          a: ({ href, children }) => {
+                            if (
+                              href.startsWith("/product/") ||
+                              href.startsWith("/category/") ||
+                              href.startsWith("/brand/")
+                            ) {
+                              return (
+                                <Link to={href} className="link">
+                                  {children}
+                                </Link>
+                              );
+                            }
+                            return (
+                              <a href={href} target="_blank" rel="noreferrer" className="link">
+                                {children}
+                              </a>
+                            );
+                          },
+                        }}
+                      >
+                        {m.text}
+                      </ReactMarkdown>
+                    ) : (
+                      m.text
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+
+            {sending && (
+              <div className="cb-row">
+                <div className="bubble bot typing">
+                  <span className="dot" />
+                  <span className="dot" />
+                  <span className="dot" />
+                </div>
+              </div>
+            )}
+          </div>
+
           {/* Input */}
-          <div style={{ display: "flex", borderTop: "1px solid #ddd" }}>
+          <div className="cb-input">
             <input
-              type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-              placeholder="Type a message..."
-              style={{
-                flex: 1,
-                border: "none",
-                padding: "10px",
-                outline: "none",
-              }}
+              onKeyDown={(e) => e.key === "Enter" && onSend()}
+              placeholder="Ask for 'deals under 500', 'skincare', 'handcraft gifts'…"
             />
-            <button
-              onClick={sendMessage}
-              style={{
-                background: "transparent",
-                border: "none",
-                padding: "10px",
-                cursor: "pointer",
-              }}
-            >
-              <IoMdSend size={20} color="#6bffb5ff" />
+            <button className="send" onClick={onSend} aria-label="Send">
+              <IoMdSend size={20} />
             </button>
           </div>
         </div>
