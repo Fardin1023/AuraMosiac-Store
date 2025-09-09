@@ -1,17 +1,24 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
-import App from './App';
+const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 
+if (!clientId) {
+  // Helpful console message if the env var isn't wired up
+  // (Make sure .env has REACT_APP_GOOGLE_CLIENT_ID and you restarted dev server)
+  // eslint-disable-next-line no-console
+  console.error(
+    "[GoogleOAuthProvider] Missing REACT_APP_GOOGLE_CLIENT_ID. " +
+    "Set it in your .env and restart the dev server."
+  );
+}
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
+ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <App />
+    <GoogleOAuthProvider clientId={clientId || ""}>
+      <App />
+    </GoogleOAuthProvider>
   </React.StrictMode>
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-
