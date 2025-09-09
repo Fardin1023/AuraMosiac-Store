@@ -4,12 +4,18 @@ import InnerImageZoom from "react-inner-image-zoom";
 import { useRef, useState } from "react";
 import "swiper/css";
 import "swiper/css/navigation";
-import 'react-inner-image-zoom/lib/styles.min.css';
+import "react-inner-image-zoom/lib/styles.min.css";
 
-const ProductZoom = () => {
-  const [slideIndex,setSlideIndex] = useState(0);
+const ProductZoom = ({ images }) => {
+  const [slideIndex, setSlideIndex] = useState(0);
   const zoomSlider = useRef();
   const zoomSliderBig = useRef();
+
+  // ✅ Ensure we always have at least one image
+  const validImages =
+    images && images.length > 0
+      ? images
+      : ["https://via.placeholder.com/400x400?text=No+Image"];
 
   const goto = (index) => {
     setSlideIndex(index);
@@ -18,49 +24,50 @@ const ProductZoom = () => {
   };
 
   return (
-    <div className="productZoom">
-      <div className="productZoom position-relative">
-        <Swiper
-          slidesPerView={1}
-          spaceBetween={0}
-          navigation={true}
-          slidesPerGroup={1}
-          modules={[Navigation]}
-          className="zoomSliderBig"
-          ref={(zoomSliderBig)}
-        >
-          <SwiperSlide>
+    <div className="productZoom position-relative">
+      {/* Main Big Zoom Slider */}
+      <Swiper
+        slidesPerView={1}
+        spaceBetween={0}
+        navigation={true}
+        slidesPerGroup={1}
+        modules={[Navigation]}
+        className="zoomSliderBig"
+        ref={zoomSliderBig}
+      >
+        {validImages.map((img, idx) => (
+          <SwiperSlide key={idx}>
             <div className="item">
               <InnerImageZoom
                 zoomType="hover"
-                zoomScale={1}
-                src="https://bk.shajgoj.com/storage/2025/07/32567.jpg"
+                zoomScale={1.2} // slightly stronger zoom
+                src={img}
               />
             </div>
           </SwiperSlide>
+        ))}
+      </Swiper>
 
-          <SwiperSlide>
-            <div className="item">
-              <InnerImageZoom
-                zoomType="hover"
-                zoomScale={1}
-                src="https://bk.shajgoj.com/storage/2025/01/vit-c-face-wash-4.jpg"
-              />
+      {/* Small Thumbnail Slider */}
+      <Swiper
+        slidesPerView={4}
+        spaceBetween={10}
+        modules={[Navigation]}
+        className="zoomSlider mt-3"
+        ref={zoomSlider}
+      >
+        {validImages.map((img, idx) => (
+          <SwiperSlide key={idx}>
+            <div
+              className={`thumb ${slideIndex === idx ? "active" : ""}`}
+              onClick={() => goto(idx)}
+            >
+              <img src={img} alt={`thumb-${idx}`} className="w-100" />
             </div>
           </SwiperSlide>
-
-          <SwiperSlide>
-            <div className="item">
-              <InnerImageZoom
-                zoomType="hover"
-                zoomScale={1}
-                src="https://bk.shajgoj.com/storage/2025/01/vit-c-face-wash-3.jpg"
-              />
-            </div>
-          </SwiperSlide>
-        </Swiper>
-      </div>
-      </div>
+        ))}
+      </Swiper>
+    </div>
   );
 };
 
