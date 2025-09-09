@@ -1,26 +1,49 @@
-const mongoose =require('mongoose');
+const mongoose = require('mongoose');
 
-const categorySchema=mongoose.Schema({
-    name:{
-        type:String,
-        required:true
+// ✅ Subcategory schema
+const subcategorySchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+      trim: true,
     },
-    images:[
-        {
-            type:String,
-            required:true
-        }
+    products: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Product', // link products directly
+      },
     ],
-    color:{
-        type:String,
-        required:true
-    }
-})
-categorySchema.virtual('id').get(function(){
-    return this._id.toHexString();
-});
-categorySchema.set('toJSON',{
-    virtuals:true,
-});
-exports.Category =mongoose.model('Category',categorySchema);
-exports.categorySchema=categorySchema;
+  },
+  { _id: true }
+);
+
+// ✅ Category schema
+const categorySchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+      trim: true,
+      unique: true, // category names should be unique
+    },
+    icon: {
+      type: String,
+      default: '',
+    },
+    color: {
+      type: String,
+      default: 'default',
+    },
+    images: [
+      {
+        type: String,
+        default: '',
+      },
+    ],
+    subcategories: [subcategorySchema], // embed subcategories
+  },
+  { timestamps: true }
+);
+
+exports.Category = mongoose.model('Category', categorySchema);
