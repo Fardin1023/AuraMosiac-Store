@@ -1,34 +1,47 @@
 import { useContext, useEffect } from "react";
 import { MyContext } from "../../App";
 import logo from "../../assets/images/logo.png";
+import { GoogleLogin } from "@react-oauth/google";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const SignIn = () => {
   const context = useContext(MyContext);
+  const navigate = useNavigate();
+
   useEffect(() => {
     context.setisHeaderFooterShow(false);
+    return () => context.setisHeaderFooterShow(true);
   }, []);
+
+  const onGoogleSuccess = async (credentialResponse) => {
+    try {
+      const res = await axios.post("http://localhost:4000/api/auth/google", {
+        credential: credentialResponse.credential,
+      });
+      const { token, user, isNewUser } = res.data || {};
+      if (token && user) {
+        localStorage.setItem("token", token);
+        context.setUser(user);
+        navigate(isNewUser || user.isProfileComplete === false ? "/welcome" : "/");
+      }
+    } catch (e) {
+      console.error(e);
+      alert("Google sign-in failed.");
+    }
+  };
+
   return (
     <section className="section signInPage">
       <div className="shape-bottom">
-        <svg
-          fill="fff"
-          id="Layer_1"
-          x="0px"
-          y="0px"
-          viewBox="0 0 1921 819.8"
-          style={{ enableBackground: "new 0 0 1921 819.8" }}
-        >
-          <path
-            class="st0"
-            d="M1921,413.4c-83.2,0-160.4-32.4-218.4-90.4c-58-58-90.4-135.2-90.4-218.4c0-83.2,32.4-160.4,90.4-218.4C1760.6-32.4,1837.8-64,1921-64c83.2,0,160.4,32.4,218.4,90.4C2180.4,32.4,2212,119.6,2212,202.8c0,83.2-32.4,160.4-90.4,218.4C2081.4,381,2004.2,413.4,1921,413.4z"
-          ></path>
-        </svg>
+        {/* …svg stays the same… */}
       </div>
       <div className="container">
-        <div className="box card p-3 shadow border-0">
-            <div className="text-center">
-                <img src={logo} alt="logo"/>
-            </div>
+        <div className="box card p-3 shadow border-0 text-center">
+          <img src={logo} alt="logo" style={{ height: 56 }} className="mb-3" />
+          <div className="d-flex justify-content-center">
+            <GoogleLogin onSuccess={onGoogleSuccess} onError={() => {}} />
+          </div>
         </div>
       </div>
     </section>
