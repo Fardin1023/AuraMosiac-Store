@@ -19,7 +19,8 @@ import Divider from "@mui/material/Divider";
 import { logout as apiLogout } from "../../api/api";
 
 const Header = () => {
-  const { user, setUser, cart, theme, setTheme, wishlist, openLoginGate } = useContext(MyContext);
+  const { user, setUser, cart, theme, setTheme, wishlist, openLoginGate } =
+    useContext(MyContext);
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const navigate = useNavigate();
@@ -53,7 +54,10 @@ const Header = () => {
     setTheme(theme === "theme-green" ? "theme-pink" : "theme-green");
   };
 
-  const cartTotal = cart.reduce((sum, item) => sum + (item.price || 0) * (item.qty || 1), 0);
+  const cartTotal = cart.reduce(
+    (sum, item) => sum + (item.price || 0) * (item.qty || 1),
+    0
+  );
 
   const handleUserBtnClick = (e) => setAnchorEl(e.currentTarget);
   const handleCloseMenu = () => setAnchorEl(null);
@@ -91,7 +95,8 @@ const Header = () => {
         <div className="top-strip bg-cyan">
           <div className="container">
             <p className="mb-0 mt-0 text-center">
-              Due to <b>technical issues</b>, orders can sometimes be processed with a delay
+              Due to <b>technical issues</b>, orders can sometimes be processed
+              with a delay
             </p>
           </div>
         </div>
@@ -100,10 +105,15 @@ const Header = () => {
         <div className="header">
           <div className="container">
             <div className="row align-items-center">
-              {/* Logo */}
+              {/* Logo + Animated Brand Name */}
               <div className="logoWrapper d-flex align-items-center col-sm-2">
-                <Link to={"/"}>
-                  <img src={logo} alt="Logo" />
+                <Link
+                  to="/"
+                  className="brandLink d-flex align-items-center"
+                  aria-label="Aura-Mosaic Home"
+                >
+                  <img src={logo} alt="Aura-Mosaic logo" />
+                  <span className="brandName">Aura-Mosaic</span>
                 </Link>
               </div>
 
@@ -133,7 +143,9 @@ const Header = () => {
                           <div className="meta">
                             <span className="name">Hi, {user.name}</span>
                             {/* 👇 show SPENT, not stored balance */}
-                            <span className="sub">Spent: Tk. {Number(user?.spent || 0).toFixed(0)}</span>
+                            <span className="sub">
+                              Spent: Tk. {Number(user?.spent || 0).toFixed(0)}
+                            </span>
                           </div>
                         </button>
 
@@ -153,19 +165,34 @@ const Header = () => {
                         </Menu>
                       </>
                     ) : (
-                      <Link to="/register" className="iconBtn" title="Sign in / Register">
+                      <Link
+                        to="/register"
+                        className="iconBtn"
+                        title="Sign in / Register"
+                      >
                         <FaRegUser />
                       </Link>
                     )}
 
                     {/* Wishlist */}
-                    <Link to="/wishlist" className="iconBtn" title="Wishlist" onClick={handleWishlistClick}>
+                    <Link
+                      to="/wishlist"
+                      className="iconBtn"
+                      title="Wishlist"
+                      onClick={handleWishlistClick}
+                    >
                       <FaRegHeart />
-                      <span className="badgeCounter">{wishlist?.length || 0}</span>
+                      <span className="badgeCounter">
+                        {wishlist?.length || 0}
+                      </span>
                     </Link>
 
                     {/* Cart (viewing cart is okay; checkout is gated in Cart page) */}
-                    <Link to="/cart" className="iconBtn" title={`Cart • Tk.${cartTotal}`}>
+                    <Link
+                      to="/cart"
+                      className="iconBtn"
+                      title={`Cart • Tk.${cartTotal}`}
+                    >
                       <FaCartPlus />
                       <span className="badgeCounter">{cart.length}</span>
                     </Link>
@@ -174,7 +201,11 @@ const Header = () => {
                     <button
                       className="iconBtn themeToggler"
                       onClick={toggleTheme}
-                      title={theme === "theme-green" ? "Switch to Pink" : "Switch to Green"}
+                      title={
+                        theme === "theme-green"
+                          ? "Switch to Pink"
+                          : "Switch to Green"
+                      }
                       aria-label="Toggle color theme"
                     >
                       {theme === "theme-green" ? "🌿" : "🌸"}
