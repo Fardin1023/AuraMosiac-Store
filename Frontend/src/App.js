@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import './App.css';
 import 'bootstrap-4-react';
 import Home from "./pages/Home";
@@ -22,6 +22,7 @@ import Wishlist from "./pages/Wishlist";
 import History from "./pages/History";
 import Gifting from "./pages/Gifting"; // ← NEW
 import Swal from "sweetalert2";
+import { IoHome } from "react-icons/io5"; // ← Home icon
 
 const MyContext = createContext();
 
@@ -40,8 +41,9 @@ function AppContent() {
   const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'theme-green');
 
   const location = useLocation();
+  const navigate = useNavigate(); // ← used by Home FAB
 
-  // 🔐 Gate: pretty, animated login prompt
+  // 🔐 Gate: pretty, animated login prompt (NO redirect here)
   const openLoginGate = async (message = "Please sign in to continue.") => {
     const res = await Swal.fire({
       title: "Hey there! 👋",
@@ -65,11 +67,7 @@ function AppContent() {
       focusConfirm: false,
       allowOutsideClick: true,
     });
-    if (res.isConfirmed) {
-      // Simple, reliable redirect without needing useNavigate here
-      window.location.assign("/register");
-    }
-    return res.isConfirmed;
+    return res.isConfirmed; // ← caller decides what to do
   };
 
   useEffect(()=>{
@@ -257,13 +255,27 @@ function AppContent() {
     return () => { clearInterval(t1); clearInterval(t2); };
   }, []);
 
-  // 🔐 Simple in-file ProtectedRoute for pages (Gifting, Wishlist)
+  // ✅ ProtectedRoute that runs the gate + redirect ONCE in an effect
   const RequireAuth = ({ children }) => {
-    if (user) return children;
-    // show gate, then redirect to register
-    openLoginGate("This page is for members. Sign in to continue.");
-    return null;
+    const [asked, setAsked] = useState(false);
+    const nav = useNavigate();
+
+    useEffect(() => {
+      if (!user && !asked) {
+        setAsked(true);
+        (async () => {
+          const ok = await openLoginGate("This page is for members. Sign in to continue.");
+          nav(ok ? "/register" : "/", { replace: true });
+        })();
+      }
+    }, [user, asked, nav]);
+
+    if (!user) return null;
+    return children;
   };
+
+  // Show Home FAB on all pages except the homepage
+  const showHomeFab = location.pathname !== "/";
 
   return (
     <MyContext.Provider value={values}>
@@ -304,7 +316,18 @@ function AppContent() {
       {isHeaderFooterShow && <Footer/>}
       {isOpenProductModal && <ProductModal/>}
 
-      <ChatBot />
+      {isHeaderFooterShow && <ChatBot />}
+      {showHomeFab && (
+        <button
+          key={location.pathname}       
+          className="home-fab pop-in"
+          aria-label="Go to homepage"
+          title="Home"
+          onClick={() => navigate('/')}
+        >
+          <IoHome />
+        </button>
+      )}
     </MyContext.Provider>
   );
 }
