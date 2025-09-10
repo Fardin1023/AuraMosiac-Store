@@ -69,7 +69,10 @@ const Navigation = () => {
                 <ul>
                   {menuCats.map((name) => (
                     <li key={name}>
-                      <Link to={linkFor(name)} onClick={(e) => protectedClick(e, name)}>
+                      <Link
+                        to={linkFor(name)}
+                        onClick={(e) => protectedClick(e, name)}
+                      >
                         <Button>
                           {name} <FaAngleRight className="ml-auto" />
                         </Button>
@@ -87,7 +90,10 @@ const Navigation = () => {
               {["Skincare", "Handcraft", "Plants", "Gifting", "New Arrivals"].map(
                 (name) => (
                   <li key={name}>
-                    <Link to={linkFor(name)} onClick={(e) => protectedClick(e, name)}>
+                    <Link
+                      to={linkFor(name)}
+                      onClick={(e) => protectedClick(e, name)}
+                    >
                       <Button className="pillLink">{name}</Button>
                     </Link>
                   </li>
